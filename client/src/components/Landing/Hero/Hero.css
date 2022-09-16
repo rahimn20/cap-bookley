@@ -1,0 +1,12 @@
+body {
+  margin: 0;
+  scroll-behavior: smooth;
+}
+
+.wrapper {
+  background-image: url('../../../assets/images/banner-bg.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
