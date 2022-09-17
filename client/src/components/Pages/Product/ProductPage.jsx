@@ -20,11 +20,23 @@ import {
 import React from 'react';
 import Footer from '../../Footer/Footer';
 import Navbar from '../../Navbar/Navbar';
-import { book1 } from '../../../assets/index';
 import RecentlyAdded from '../../Landing/RecentlyAdded/RecentlyAdded';
 import { MdLocalShipping } from 'react-icons/md';
+import { useContext } from 'react';
+import BookContext from '../../context/books';
+import { useParams } from 'react-router-dom';
 
 function ProductPage() {
+  const { book, getBookById } = useContext(BookContext);
+  const { id } = useParams();
+
+  React.useEffect(() => {
+    const fetchBook = async () => {
+      await getBookById(id);
+    };
+    fetchBook();
+  }, [getBookById, id]);
+
   return (
     <>
       <Navbar />
@@ -50,7 +62,7 @@ function ProductPage() {
 
         <Flex gap={100} py={30}>
           <Image
-            src={book1}
+            src={book.imageUrl}
             fit={'cover'}
             align={'center'}
             w={'100%'}
@@ -59,16 +71,16 @@ function ProductPage() {
 
           <Stack>
             <Heading fontSize="64px" fontWeight="700" color="#0D2725">
-              Ego is the Enemy
+              {book.title}
             </Heading>
             <Heading fontSize="32px" fontWeight="500" color="#0D2725">
-              By Ryan Holiday
+              By {book.author}
             </Heading>
             <Heading fontSize="38px" fontWeight="700" color="#0D2725" pb={5}>
-              PKR 1,500
+              PKR {book.price}
             </Heading>
             <Text fontSize="20px" fontWeight="500" color="#0D2725">
-              “While the history books are filled with tales of obsessive,
+            “While the history books are filled with tales of obsessive,
               visionary geniuses who remade the world in their image with sheer,
               almost irrational force, I’ve found that history is also made by
               individuals who fought their egos at every turn, who eschewed the
@@ -93,9 +105,15 @@ function ProductPage() {
               accomplish the world-changing work you've set out to achieve.”
             </Text>
 
-            <Heading fontSize="32px" fontWeight="600" color="green" py={15}>
-              In Stock
-            </Heading>
+            {book.available ? (
+              <Heading fontSize="32px" fontWeight="600" color="green" py={15}>
+                In Stock
+              </Heading>
+            ) : (
+              <Heading fontSize="32px" fontWeight="600" color="red" py={15}>
+                Not Available
+              </Heading>
+            )}
 
             <Stack direction={'row'} align="center" gap={5} pb={30}>
               <NumberInput size="md" maxW={32} defaultValue={1} min={1}>
@@ -105,9 +123,16 @@ function ProductPage() {
                   <NumberDecrementStepper />
                 </NumberInputStepper>
               </NumberInput>
-              <Button bg="#0D2725" colorScheme="green">
-                Add to Cart
-              </Button>
+              {book.available ? (
+                <Button bg="#0D2725" colorScheme="green">
+                  Add to Cart
+                </Button>
+              ) : (
+                <Button disabled bg="#0D2725" colorScheme="green">
+                  Add to Cart
+                </Button>
+              )}
+
               <Stack
                 direction="row"
                 alignItems="center"

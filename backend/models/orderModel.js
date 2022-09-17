@@ -9,17 +9,17 @@ const orderSchema = new Schema(
       ref: "user",
       required: true,
     },
-    book: [
+    product: [
       {
         type: Schema.Types.ObjectId,
         ref: "book",
-        // required: true,
+        required: true,
       },
     ],
     booksOrdered: {
       type: Number,
       default: 1,
-      // required: true,
+      required: true,
     },
     totalAmount: {
       type: Number,

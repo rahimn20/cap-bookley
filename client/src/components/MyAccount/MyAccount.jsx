@@ -10,6 +10,11 @@ import {
   FormControl,
   Heading,
   Input,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Select,
   Stack,
 } from '@chakra-ui/react';
@@ -21,6 +26,7 @@ function MyAccount() {
   const [author, setAuthor] = React.useState('');
   const [description, setDescription] = React.useState('');
   const [category, setCategory] = React.useState('');
+  const [quantity, setQuantity] = React.useState(0);
   const [price, setPrice] = React.useState('');
   const [available, setIsAvailable] = React.useState(false);
   const [imageUrl, setImageUrl] = React.useState('');
@@ -39,32 +45,6 @@ function MyAccount() {
     { name: 'Add New Book', icon: FaPlus },
   ];
 
-  // const handleFileChange = e => {
-  //   const img = {
-  //     preview: URL.createObjectURL(e.target.files[0]),
-  //     data: e.target.files[0],
-  //   };
-  //   setImage(img);
-  // };
-
-  // const uploadImage = async () => {
-  //   const formData = new FormData();
-  //   formData.append('file', imageUrl);
-  //   formData.append('upload_preset', 'ml_default');
-  //     try {
-  //       fetch('https://api.cloudinary.com/v1_1/dx5ghfasm/image/upload', {
-  //         method: 'POST',
-  //         body: formData,
-  //       }).then(res => {
-  //         res.json();
-  //         console.log(res);
-  //         console.log({ formData });
-  //       });
-  //     } catch (error) {
-  //       console.error('Error uploading image to cloud', error);
-  //     }
-  // };
-
   const handleSubmit = async e => {
     // e.preventDefault();
     const books = {
@@ -72,6 +52,7 @@ function MyAccount() {
       author,
       description,
       category,
+      quantity,
       price,
       available,
       imageUrl,
@@ -160,6 +141,18 @@ function MyAccount() {
                   </option>
                 ))}
               </Select>
+              <FormControl id="quantity">
+                <Input
+                  focusBorderColor="#0D2725"
+                  autoComplete="off"
+                  placeholder="Enter book quantity"
+                  size="md"
+                  value={quantity}
+                  onChange={e => {
+                    setQuantity(e.target.value);
+                  }}
+                ></Input>
+              </FormControl>
               <FormControl id="price">
                 <Input
                   focusBorderColor="#0D2725"

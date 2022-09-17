@@ -1,13 +1,21 @@
 import { Box, Grid, Image, Text, VStack } from '@chakra-ui/react';
 import React from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
 // import { nanoid } from 'nanoid';
 
 function SearchResults({ suggestions }) {
+  const navigate = useNavigate();
+
+  const handleClick = bks => {
+    navigate(`/product/${bks}`);
+  };
+  
   return (
     // <div>{suggestions.title}</div>
     <Grid gridRowGap={'1rem'}>
       {suggestions.map((suggestion, index) => (
         <Box
+          onClick={() => handleClick(`${suggestion._id}`)}
           key={suggestion.id}
           maxW={'full'}
           bg="#FAFAFA"

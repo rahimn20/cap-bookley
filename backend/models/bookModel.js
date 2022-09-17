@@ -20,9 +20,9 @@ const bookSchema = new Schema(
       type: String,
       // required: true,
     },
-    purchaseCount: {
+    quantity: {
       type: Number,
-      required: false,
+      required: true,
     },
     price: {
       type: Number,

@@ -28,7 +28,7 @@ function Layout() {
             <Route path="/register" element={<Register />} />
             <Route path="/" element={<Landing />} />
             <Route path="/shop" element={<Shop />} />
-            <Route path="/product" element={<ProductPage />} />
+            <Route path="/product/:id" element={<ProductPage />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/my-account" element={<MyAccount />} />
             {/* <Route element={<Error />} /> */}

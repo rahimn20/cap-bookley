@@ -55,9 +55,9 @@ function Navbar() {
 
   return (
     <>
-      <Box bg="#0D2725" px={4}>
+      <Box bg="#0D2725" px={4} >
         <Container maxW="8xl">
-          <Flex h={20} alignItems={'center'} justifyContent={'space-between'}>
+          <Flex h={20} alignItems={'center'} justifyContent={'space-between'} >
             <IconButton
               size={'md'}
               icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}

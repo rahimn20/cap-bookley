@@ -1,9 +1,10 @@
 import React from 'react';
-import { Heading, Stack, Flex, Container } from '@chakra-ui/react';
+import { Heading, Stack, Flex, Container, Link } from '@chakra-ui/react';
 import BookCard from './BookCard';
 // import { book, book1, book2, book3 } from '../../../assets/index';
 import BookContext from '../../context/books';
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 // const bookSet = [
 //   {
@@ -34,6 +35,7 @@ import { useContext } from 'react';
 
 function Featured() {
   const { books, getBooks } = useContext(BookContext);
+  const navigate = useNavigate();
 
   React.useEffect(() => {
     const fetchBook = async () => {
@@ -41,6 +43,11 @@ function Featured() {
     };
     fetchBook();
   }, [getBooks]);
+
+  const handleClick = bks => {
+    // console.log(books._id);
+    navigate(`/product/${bks}`);
+  };
 
   return (
     <>
@@ -61,13 +68,15 @@ function Featured() {
             gap="120"
           >
             {books.map(bks => (
-              <BookCard
-                key={bks.id}
-                img={bks.imageUrl}
-                title={bks.title}
-                author={bks.author}
-                price={bks.price}
-              />
+              <Link onClick={() => handleClick(`${bks._id}`)}>
+                <BookCard
+                  key={bks.id}
+                  img={bks.imageUrl}
+                  title={bks.title}
+                  author={bks.author}
+                  price={bks.price}
+                />
+              </Link>
             ))}
           </Stack>
         </Flex>
