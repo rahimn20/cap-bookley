@@ -8,11 +8,13 @@ import {
   Image,
 } from '@chakra-ui/react';
 import React from 'react';
-// import stand from '../../../assets/stand.png';
 import { stand } from '../../../assets/index';
 import './Hero.css';
 import { FaShippingFast, FaLock, FaRedoAlt, FaHeadset } from 'react-icons/fa';
 import IconCard from './IconCard';
+import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import BookContext from '../../context/books';
 
 const iconSet = [
   {
@@ -38,6 +40,16 @@ const iconSet = [
 ];
 
 function Hero() {
+  const { books } = useContext(BookContext);
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    navigate('/shop');
+  };
+
+  const handleClick = bks => {
+    navigate(`/product/${bks}`);
+  };
   return (
     <>
       {/*Hero*/}
@@ -57,13 +69,28 @@ function Hero() {
                 <Text fontSize="2xl" color="#0D2725">
                   Save upto 40% off
                 </Text>
-                <Button w={100} bg="#0D2725" colorScheme="green">
+                <Button
+                  onClick={handleNavigate}
+                  w={100}
+                  bg="#0D2725"
+                  colorScheme="green"
+                >
                   Shop Now
                 </Button>
               </Stack>
 
               <Container maxW="full">
-                <Image src={stand} className="stand" alt="" mb="-300px" />
+                <Flex justifyContent={'center'} gap={'80px'}>
+                  {books.slice(0, 4).map(book => (
+                    <Image
+                      src={book.imageUrl}
+                      w="130px"
+                      mb={15}
+                      onClick={() => handleClick(`${book._id}`)}
+                    />
+                  ))}
+                </Flex>
+                <Image src={stand} className="stand" alt="" mb="-100px" />
               </Container>
 
               {/* <Image objectFit="cover" h="full" src={stand} /> */}

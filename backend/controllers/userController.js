@@ -17,23 +17,19 @@ const getUser = async function (req, res) {
     });
 };
 
-// const createUser = async (req, res) => {
-//   const { firstName, lastName, email, address, phoneNumber, password } =
-//     req.body;
-//   try {
-//     const user = await User.create({
-//       firstName,
-//       lastName,
-//       email,
-//       address,
-//       phoneNumber,
-//       password,
-//     });
-//     res.status(200).json(user);
-//   } catch (err) {
-//     res.status(400).json({ error: err });
-//   }
-// };
+const addToCart = async (req, res) => {
+  const cart = req.body;
+
+  User.findByIdAndUpdate(req.params.id, { cart }, { new: true })
+    .populate("cart")
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+};
 
 const deleteUser = async (req, res) => {
   User.findByIdAndRemove(req.params.id)
@@ -61,9 +57,23 @@ const updateUser = async (req, res) => {
   console.log(`Successfully updated ${req.params.id}`);
 };
 
+const checkOut = async (req, res) => {
+  User.findByIdAndUpdate(req.params.id, { cart: [] }, { new: true })
+    .populate("cart")
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+};
+
 module.exports = {
   getUsers,
   getUser,
   deleteUser,
   updateUser,
+  addToCart,
+  checkOut,
 };

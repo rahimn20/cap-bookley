@@ -1,7 +1,6 @@
 import {
   Container,
   Heading,
-  // Image,
   Stack,
   InputGroup,
   Input,
@@ -28,7 +27,6 @@ function Newsletter() {
         backgroundSize={'cover'}
         backgroundRepeat={'no-repeat'}
         position="relative"
-        // backgroundAttachment={'fixed'}
       >
         <Stack
           align={'center'}
@@ -63,7 +61,6 @@ function Newsletter() {
                   w="180px"
                   h="60px"
                   background="#FFF2DF"
-                  //   p={15}
                   mt={5}
                   fontSize="16px"
                   fontWeight="700"

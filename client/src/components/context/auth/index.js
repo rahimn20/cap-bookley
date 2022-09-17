@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import AuthState from './authState';
+import AuthState from './AuthState';
 
 const AuthContext = createContext();
 

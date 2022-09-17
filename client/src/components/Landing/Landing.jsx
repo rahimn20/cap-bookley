@@ -7,8 +7,18 @@ import TopSelling from './TopSelling/TopSelling';
 import RecentlyAdded from './RecentlyAdded/RecentlyAdded';
 import Newsletter from './Newsletter/Newsletter';
 import Footer from '../Footer/Footer';
+import { useContext } from 'react';
+import BookContext from '../context/books';
 
 function Landing() {
+  const { getBooks } = useContext(BookContext);
+  React.useEffect(() => {
+    const fetchBook = async () => {
+      await getBooks();
+    };
+    fetchBook();
+  }, [getBooks]);
+
   return (
     <>
       <Navbar />

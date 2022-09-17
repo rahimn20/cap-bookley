@@ -24,14 +24,25 @@ import { HamburgerIcon, CloseIcon, Search2Icon } from '@chakra-ui/icons';
 import { FaHeart, FaShoppingCart, FaUserAlt } from 'react-icons/fa';
 import SearchResults from './SearchResults';
 import BookContext from '../context/books';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import AuthContext from '../context/auth';
+import useIsLoggedIn from '../../hooks/useIsLoggedIn';
 
-const navLinks = ['Home', 'Featured', 'Top Selling', 'Recent', 'Shop'];
+const navLinks = [
+  { text: 'Home', href: '/' },
+  { text: 'Featured', href: '#Featured' },
+  { text: 'Top Selling', href: '/' },
+  { text: 'Recent', href: '/' },
+  { text: 'Shop', href: '/shop' },
+];
 
 function Navbar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [text, setText] = React.useState('');
   const [suggestions, setSuggestions] = React.useState([]);
   const { books, getBooks } = useContext(BookContext);
+  const navigate = useNavigate();
+  const { logout } = useContext(AuthContext);
 
   React.useEffect(() => {
     const fetchBook = async () => {
@@ -53,6 +64,8 @@ function Navbar() {
     setText(text);
   };
 
+  const isLoggedIn = useIsLoggedIn();
+
   return (
     <>
       <Box bg="#0D2725" px={4}>
@@ -66,7 +79,15 @@ function Navbar() {
               onClick={isOpen ? onClose : onOpen}
             />
             <HStack spacing={8} alignItems={'center'}>
-              <Box fontWeight={700} fontSize="4xl" color="#FFFFFF">
+              <Box
+                _hover={{
+                  cursor: 'pointer',
+                }}
+                onClick={() => navigate('/home')}
+                fontWeight={700}
+                fontSize="4xl"
+                color="#FFFFFF"
+              >
                 Bookley
               </Box>
             </HStack>
@@ -132,6 +153,10 @@ function Navbar() {
                   color="#FFFFFF"
                 ></Icon>
                 <Icon
+                  _hover={{
+                    cursor: 'pointer',
+                  }}
+                  onClick={() => navigate('/cart')}
                   as={FaShoppingCart}
                   h={7}
                   w={7}
@@ -153,12 +178,25 @@ function Navbar() {
                     color="#FFFFFF"
                   ></Icon>
                 </MenuButton>
-                <MenuList>
-                  <MenuItem>My Account</MenuItem>
-                  <MenuItem>Order History</MenuItem>
-                  <MenuDivider />
-                  <MenuItem>Logout</MenuItem>
-                </MenuList>
+                {isLoggedIn ? (
+                  <MenuList>
+                    <MenuItem onClick={() => navigate('/my-account')}>
+                      My Account
+                    </MenuItem>
+                    <MenuItem>Order History</MenuItem>
+                    <MenuDivider />
+                    <MenuItem onClick={() => logout()}>Logout</MenuItem>
+                  </MenuList>
+                ) : (
+                  <MenuList>
+                    <MenuItem onClick={() => navigate('/login')}>
+                      Login
+                    </MenuItem>
+                    <MenuItem onClick={() => navigate('/register')}>
+                      Register
+                    </MenuItem>
+                  </MenuList>
+                )}
               </Menu>
             </Flex>
           </Flex>
@@ -194,9 +232,11 @@ function Navbar() {
         py={'10px'}
       >
         {navLinks.map(navL => (
-          <Link key={navL} href={'#'} fontSize="20px" fontWeight={400}>
-            {navL}
-          </Link>
+          <RouterLink to={navL.href}>
+            <Link key={navL.text} fontSize="20px" fontWeight={400}>
+              {navL.text}
+            </Link>
+          </RouterLink>
         ))}
       </Stack>
     </>

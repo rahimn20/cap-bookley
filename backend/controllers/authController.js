@@ -8,7 +8,6 @@ const registerUser = async (req, res) => {
     req.body;
 
   const newUser = new User({
-    // email: req.body,
     firstName,
     lastName,
     email,
@@ -22,8 +21,19 @@ const registerUser = async (req, res) => {
 
   try {
     const savedUser = await newUser.save();
-    console.log({ savedUser });
-    res.status(201).json(savedUser);
+
+    const accessToken = jwt.sign(
+      {
+        id: savedUser._id,
+      },
+      process.env.jwtSecret,
+      { expiresIn: "3d" }
+    );
+
+    const { password, ...others } = savedUser;
+    console.log(`Successfully registered`);
+    res.status(200).json({ ...others, accessToken });
+
     console.log(`Successfully registered user`);
   } catch (err) {
     res.status(500).json(err);

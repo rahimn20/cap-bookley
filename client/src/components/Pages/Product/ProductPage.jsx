@@ -20,11 +20,26 @@ import {
 import React from 'react';
 import Footer from '../../Footer/Footer';
 import Navbar from '../../Navbar/Navbar';
-import { book1 } from '../../../assets/index';
 import RecentlyAdded from '../../Landing/RecentlyAdded/RecentlyAdded';
 import { MdLocalShipping } from 'react-icons/md';
+import { useContext } from 'react';
+import BookContext from '../../context/books';
+import { useParams } from 'react-router-dom';
+import AuthContext from '../../context/auth';
 
 function ProductPage() {
+  const { book, getBookById } = useContext(BookContext);
+  const { addToCart } = useContext(AuthContext);
+  const { id } = useParams();
+
+  React.useEffect(() => {
+    const fetchBook = async () => {
+      await getBookById(id);
+    };
+    fetchBook();
+    console.log('fetchBook');
+  }, [getBookById, id]);
+
   return (
     <>
       <Navbar />
@@ -36,21 +51,21 @@ function ProductPage() {
           separator={<ChevronRightIcon color="gray.500" />}
         >
           <BreadcrumbItem>
-            <BreadcrumbLink href="#">Home</BreadcrumbLink>
+            <BreadcrumbLink href="/home">Home</BreadcrumbLink>
           </BreadcrumbItem>
 
           <BreadcrumbItem>
-            <BreadcrumbLink href="#">Books</BreadcrumbLink>
+            <BreadcrumbLink href="/shop">Books</BreadcrumbLink>
           </BreadcrumbItem>
 
           <BreadcrumbItem isCurrentPage>
-            <BreadcrumbLink href="#">Ego is the Enemy</BreadcrumbLink>
+            <BreadcrumbLink href="#">{book.title}</BreadcrumbLink>
           </BreadcrumbItem>
         </Breadcrumb>
 
         <Flex gap={100} py={30}>
           <Image
-            src={book1}
+            src={book.imageUrl}
             fit={'cover'}
             align={'center'}
             w={'100%'}
@@ -59,42 +74,25 @@ function ProductPage() {
 
           <Stack>
             <Heading fontSize="64px" fontWeight="700" color="#0D2725">
-              Ego is the Enemy
+              {book.title}
             </Heading>
             <Heading fontSize="32px" fontWeight="500" color="#0D2725">
-              By Ryan Holiday
+              By {book.author}
             </Heading>
             <Heading fontSize="38px" fontWeight="700" color="#0D2725" pb={5}>
-              PKR 1,500
+              PKR {book.price}
             </Heading>
             <Text fontSize="20px" fontWeight="500" color="#0D2725">
-              “While the history books are filled with tales of obsessive,
-              visionary geniuses who remade the world in their image with sheer,
-              almost irrational force, I’ve found that history is also made by
-              individuals who fought their egos at every turn, who eschewed the
-              spotlight, and who put their higher goals above their desire for
-              recognition.” – from the Prologue Many of us insist the main
-              impediment to a full, successful life is the outside world. In
-              fact, the most common enemy lies within: our ego. Early in our
-              careers, it impedes learning and the cultivation of talent. With
-              success, it can blind us to our faults and sow future problems. In
-              failure, it magnifies each blow and makes recovery more difficult.
-              At every stage, ego holds us back. The Ego is the Enemy draws on a
-              vast array of stories and examples, from literature to philosophy
-              to history. We meet fascinating figures like Howard Hughes,
-              Katharine Graham, Bill Belichick, and Eleanor Roosevelt, all of
-              whom reached the highest levels of power and success by conquering
-              their own egos. Their strategies and tactics can be ours as well.
-              But why should we bother fighting ego in an era that glorifies
-              social media, reality TV, and other forms of shameless
-              self-promotion? Armed with the lessons in this book, as Holiday
-              writes, “you will be less invested in the story you tell about
-              your own specialness, and as a result, you will be liberated to
-              accomplish the world-changing work you've set out to achieve.”
+              {book.description}
             </Text>
 
-            <Heading fontSize="32px" fontWeight="600" color="green" py={15}>
-              In Stock
+            <Heading
+              fontSize="32px"
+              fontWeight="600"
+              color={book.available ? 'green' : 'red'}
+              py={15}
+            >
+              {book.available ? 'In Stock' : 'Out of Stock'}
             </Heading>
 
             <Stack direction={'row'} align="center" gap={5} pb={30}>
@@ -105,9 +103,16 @@ function ProductPage() {
                   <NumberDecrementStepper />
                 </NumberInputStepper>
               </NumberInput>
-              <Button bg="#0D2725" colorScheme="green">
+
+              <Button
+                disabled={!book.available}
+                bg="#0D2725"
+                colorScheme="green"
+                onClick={() => addToCart(book)}
+              >
                 Add to Cart
               </Button>
+
               <Stack
                 direction="row"
                 alignItems="center"

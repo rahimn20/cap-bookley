@@ -15,22 +15,26 @@ import {
 import { FcGoogle } from 'react-icons/fc';
 import React from 'react';
 import { library } from '../../assets/index';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import AuthContext from '../context/auth';
+import { useEffect } from 'react';
 
 function Register() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext);
+  const { login, user } = useContext(AuthContext);
+
+  useEffect(() => {
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async e => {
-    // e.preventDefault();
     const user = { email, password };
-    console.log({ user });
     await login(user);
-    navigate('/');
   };
 
   return (
@@ -122,9 +126,11 @@ function Register() {
               <Text fontSize="lg" color="#6E7D7C">
                 Don't have an account?
               </Text>
-              <Link to="/register" fontSize="lg" color="#0D2725">
-                <strong>Sign up now</strong>
-              </Link>
+              <RouterLink to="/register">
+                <Link as={'span'} fontSize="lg" color="#0D2725">
+                  <strong>Sign up now</strong>
+                </Link>
+              </RouterLink>
             </Stack>
           </Stack>
         </Flex>

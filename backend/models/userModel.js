@@ -36,6 +36,13 @@ const userSchema = new Schema(
         ref: "order",
       },
     ],
+    cart: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'book'
+      }
+
+    ]
   },
   { timestamps: true }
 );

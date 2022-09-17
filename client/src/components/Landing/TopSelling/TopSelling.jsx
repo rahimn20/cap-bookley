@@ -1,36 +1,17 @@
-import React from 'react';
-import { Heading, Stack, Flex, Container } from '@chakra-ui/react';
+import React, { useContext } from 'react';
+import { Heading, Stack, Flex, Container, Link } from '@chakra-ui/react';
 import BookCard from '../Featured/BookCard';
-import { book4, book5, book6, book7 } from '../../../assets/index';
-
-const bookSet = [
-  {
-    img: book4,
-    title: 'King of Scars',
-    author: 'Leigh Bardugo',
-    price: '3,600 ',
-  },
-  {
-    img: book5,
-    title: 'The Hobbit',
-    author: 'J.R.R Tolkien',
-    price: '1,300 ',
-  },
-  {
-    img: book6,
-    title: 'Children of Blood and Bone',
-    author: 'Tomi Adeyemi',
-    price: '2,600',
-  },
-  {
-    img: book7,
-    title: 'Caraval',
-    author: 'Stephanie Garber',
-    price: '1,900',
-  },
-];
+import { useNavigate } from 'react-router-dom';
+import BookContext from '../../context/books';
 
 function Featured() {
+  const { books } = useContext(BookContext);
+
+  const navigate = useNavigate();
+
+  const handleClick = bks => {
+    navigate(`/product/${bks}`);
+  };
   return (
     <>
       <Container maxW={'8xl'}>
@@ -49,14 +30,26 @@ function Featured() {
             direction={{ base: 'column', md: 'row' }}
             gap="120"
           >
-            {bookSet.map(info => (
-              <BookCard
-                key={info.id}
-                img={info.img}
-                title={info.title}
-                author={info.author}
-                price={info.price}
-              />
+            {books.slice(4, 8).map(info => (
+              <Link
+                px={15}
+                pb={5}
+                _hover={{
+                  shadow: 'xl',
+                  transform: 'scale(1.1)',
+                  borderRadius: '0.5rem',
+                  transition: 'transform .3s',
+                }}
+                onClick={() => handleClick(`${info._id}`)}
+              >
+                <BookCard
+                  key={info.id}
+                  img={info.imageUrl}
+                  title={info.title}
+                  author={info.author}
+                  price={info.price}
+                />
+              </Link>
             ))}
           </Stack>
         </Flex>

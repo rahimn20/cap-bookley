@@ -22,9 +22,8 @@ const createOrder = async (req, res) => {
   const { userID, totalAmount } = req.body;
   try {
     const order = await Order.create({
-      //   booksOrdered,
-      totalAmount,
       owner: userID,
+      totalAmount,
     });
     const user = await User.findById(userID).exec();
     console.log(user);

@@ -5,13 +5,27 @@ import Register from '../Register/Register';
 import Login from '../Login/Login';
 import Landing from '../Landing/Landing';
 import theme from '../theme/index';
-import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  Navigate,
+} from 'react-router-dom';
 import Shop from '../Pages/Shop/Shop';
 import ProductPage from '../Pages/Product/ProductPage';
 import Cart from '../Pages/Cart/Cart';
 import MyAccount from '../MyAccount/MyAccount';
+import AuthContext from '../context/auth';
+import { useContext } from 'react';
+import { useEffect } from 'react';
 
 function Layout() {
+  const { getUserFromLocal } = useContext(AuthContext);
+
+  useEffect(() => {
+    getUserFromLocal();
+  }, [getUserFromLocal]);
+
   return (
     <>
       <ChakraProvider theme={theme}>
@@ -24,11 +38,13 @@ function Layout() {
         <Router>
           <Routes>
             {/* <Route exact path="/" element={<FirstPage />} /> */}
+
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
-            <Route path="/" element={<Landing />} />
+            <Route path="/home" element={<Landing />} />
+            <Route path="/" element={<Navigate replace to="/home" />} />
             <Route path="/shop" element={<Shop />} />
-            <Route path="/product" element={<ProductPage />} />
+            <Route path="/product/:id" element={<ProductPage />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/my-account" element={<MyAccount />} />
             {/* <Route element={<Error />} /> */}

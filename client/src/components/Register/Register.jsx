@@ -12,9 +12,9 @@ import {
   Link,
 } from '@chakra-ui/react';
 import { FcGoogle } from 'react-icons/fc';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { library } from '../../assets/index';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { useContext } from 'react';
 import AuthContext from '../context/auth';
 // import {Link} from "react-router-dom"
@@ -27,14 +27,20 @@ function Register() {
   const [phoneNumber, setPhoneNumber] = React.useState('');
   const [password, setPassword] = React.useState('');
   const navigate = useNavigate();
-  const { register } = useContext(AuthContext);
+  const { register, user } = useContext(AuthContext);
+
+  useEffect(() => {
+    // console.log({ user });
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate]);
 
   const handleSubmit = async e => {
     // e.preventDefault();
     const user = { firstName, lastName, email, address, phoneNumber, password };
     console.log({ user });
     await register(user);
-    navigate('/login');
   };
 
   return (
@@ -145,17 +151,6 @@ function Register() {
               ></Input>
             </FormControl>
 
-            {/* Confirm password input field */}
-            {/* <FormControl id="confirmPassword" pb="30px">
-              <Input
-                focusBorderColor="#0D2725"
-                autoComplete="off"
-                placeholder="Confirm your Password"
-                type="password"
-                size="md"
-              ></Input>
-            </FormControl> */}
-
             {/* Sign up button */}
             <Button
               bg="#0D2725"
@@ -178,9 +173,11 @@ function Register() {
               <Text fontSize="lg" color="#6E7D7C">
                 Already have an account?
               </Text>
-              <Link to="/" fontSize="lg" color="#0D2725">
-                <strong>Sign in now</strong>
-              </Link>
+              <RouterLink to="/login">
+                <Link as={'span'} fontSize="lg" color="#0D2725">
+                  <strong>Sign in now</strong>
+                </Link>
+              </RouterLink>
             </Stack>
           </Stack>
         </Flex>

@@ -1,7 +1,6 @@
 import { Container, Divider, Image, Stack } from '@chakra-ui/react';
 import React from 'react';
 import explore from '../../../assets/Separator.svg';
-// import { separator } from '../../assets/index';
 
 function Separator() {
   return (

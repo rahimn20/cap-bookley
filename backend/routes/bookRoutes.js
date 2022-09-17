@@ -12,7 +12,7 @@ const { verifyToken } = require("../middleware/verifyToken");
 const router = express.Router();
 
 router.get("/", getBooks);
-router.get("/:id", verifyToken, getBook);
+router.get("/:id", getBook);
 // router.post("/", multerUploads, createBook);
 router.post("/", createBook);
 router.delete("/:id", verifyToken, deleteBook);

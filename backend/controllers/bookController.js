@@ -1,8 +1,5 @@
 const Book = require("../models/bookModel");
 const cloudinary = require("cloudinary").v2;
-// const cors = require('cors')
-
-// app.use(cors())
 
 cloudinary.config({
   cloud_name: process.env.CLOUDNAME,
@@ -11,7 +8,16 @@ cloudinary.config({
 });
 
 const getBooks = async function (req, res) {
-  const books = await Book.find({});
+  const { s, min, max } = req.query;
+  const sortMap = {
+    recent: { createdAt: -1 },
+    aToZ: { title: 1 },
+    zToA: { title: -1 },
+  };
+  const books = await Book.find({ price: { $gte: min, $lte: max } }).sort(
+    sortMap[s]
+  );
+
   res.status(200).json(books);
 };
 
@@ -27,55 +33,13 @@ const getBook = async function (req, res) {
     });
 };
 
-// const createBook = async (req, res) => {
-//   const {
-//     title,
-//     author,
-//     description,
-//     category,
-//     purchaseCount,
-//     price,
-//     available,
-//     imageUrl,
-//     publishDate,
-//     tags,
-//   } = req.body;
-//   console.log(req.body);
-//   console.log("file:" , req.file)
-//   return
-//   try {
-//     const result = await cloudinary.uploader.upload(imageUrl, {
-//       folder: "books",
-//     });
-
-//     const book = await Book.create({
-//       title,
-//       author,
-//       description,
-//       category,
-//       purchaseCount,
-//       price,
-//       available,
-//       imageUrl: {
-//         public_id: result.public_id,
-//         url: result.secure_url,
-//       },
-//       publishDate,
-//       tags,
-//     });
-//     res.status(200).json(book);
-//   } catch (err) {
-//     res.status(400).json({ error: err });
-//   }
-// };
-
 const createBook = async (req, res) => {
   const {
     title,
     author,
     description,
     category,
-    purchaseCount,
+    quantity,
     price,
     available,
     imageUrl,
@@ -89,7 +53,7 @@ const createBook = async (req, res) => {
       author,
       description,
       category,
-      purchaseCount,
+      quantity,
       price,
       available,
       imageUrl,

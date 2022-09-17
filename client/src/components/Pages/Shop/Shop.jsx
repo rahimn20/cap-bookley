@@ -9,138 +9,70 @@ import {
   Flex,
   Grid,
   Heading,
-  Input,
   Select,
-  Slider,
-  SliderFilledTrack,
-  SliderThumb,
-  SliderTrack,
   Stack,
   Text,
+  Link,
+  RangeSlider,
+  RangeSliderTrack,
+  RangeSliderFilledTrack,
+  RangeSliderThumb,
+  Button,
 } from '@chakra-ui/react';
-import React, { useContext } from 'react';
+import React, { useCallback, useContext } from 'react';
 import { FaDollarSign } from 'react-icons/fa';
 import Footer from '../../Footer/Footer';
 import Navbar from '../../Navbar/Navbar';
-// import {
-//   book,
-//   book1,
-//   book2,
-//   book3,
-//   book4,
-//   book5,
-//   book6,
-//   book7,
-//   book8,
-//   book9,
-//   book10,
-//   book11,
-// } from '../../../assets/index';
 import BookCard from '../../Landing/Featured/BookCard';
 import BookContext from '../../context/books';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
-const catCheck = [
-  { label: 'Arts and Crafts', checked: false },
-  { label: 'Business and Management', checked: false },
-  { label: 'Fiction', checked: false },
-  { label: 'Non Fiction', checked: false },
-  { label: 'History', checked: false },
+const catCheck = {
+  'Arts and Crafts': false,
+  'Business and Management': false,
+  Fiction: false,
+  'Non Fiction': false,
+  History: false,
+};
+
+const sortOptions = [
+  { text: 'Recent', value: 'recent' },
+  { text: 'Name A-Z', value: 'aToZ' },
+  { text: 'Name Z-A', value: 'zToA' },
 ];
 
-const sort = ['Newest', 'Featured', 'Top Selling'];
-
-// const shopSet = [
-//   {
-//     img: book,
-//     title: 'Dongri to Dubai',
-//     author: 'Hussain Zaidi',
-//     price: '1,200',
-//   },
-//   {
-//     img: book1,
-//     title: 'Ego is the Enemy',
-//     author: 'Ryan Holiday',
-//     price: '1,500',
-//   },
-//   {
-//     img: book2,
-//     title: 'Rich Dad Poor Dad',
-//     author: 'Robert T. Kiyosaki',
-//     price: '2,200',
-//   },
-//   {
-//     img: book3,
-//     title: 'War Storm',
-//     author: 'Victoria Aveyard',
-//     price: '1,200',
-//   },
-//   {
-//     img: book4,
-//     title: 'King of Scars',
-//     author: 'Leigh Bardugo',
-//     price: '3,600 ',
-//   },
-//   {
-//     img: book5,
-//     title: 'The Hobbit',
-//     author: 'J.R.R Tolkien',
-//     price: '1,300 ',
-//   },
-//   {
-//     img: book6,
-//     title: 'Children of Blood and Bone',
-//     author: 'Tomi Adeyemi',
-//     price: '2,600',
-//   },
-//   {
-//     img: book7,
-//     title: 'Caraval',
-//     author: 'Stephanie Garber',
-//     price: '1,900',
-//   },
-//   {
-//     img: book8,
-//     title: 'The Da Vinci Code',
-//     author: 'Angels & Demons',
-//     price: '2,600 ',
-//   },
-//   {
-//     img: book9,
-//     title: 'The Shining',
-//     author: 'Stephen King',
-//     price: '1,500',
-//   },
-//   {
-//     img: book10,
-//     title: 'Frost Blood',
-//     author: 'Elly Blake',
-//     price: '2,400',
-//   },
-//   {
-//     img: book11,
-//     title: 'To Kill a Mocking Bird',
-//     author: 'Harper Lee',
-//     price: '1,900',
-//   },
-// ];
-
 function Shop() {
-  // const [data, setData] = React.useState([]);
   const { books, getBooks } = useContext(BookContext);
+  const [range, setRange] = useState([0, 5000]);
+  const [sort, setSort] = useState('recent');
+  const [categories, setCategories] = useState(catCheck);
+
+  const filterHandler = useCallback(async () => {
+    const filters = { min: range[0], max: range[1] };
+    await getBooks({ sort, filters });
+  }, [getBooks, range, sort]);
+
+  const sortHandler = async e => {
+    setSort(e.target.value);
+    filterHandler();
+  };
+
+  const categoriesHandler = cat => {
+    const updatedCategories = { ...categories };
+    updatedCategories[cat] = !updatedCategories[cat];
+    setCategories(updatedCategories);
+  };
 
   React.useEffect(() => {
-    const fetchBook = async () => {
-      await getBooks();
-    };
-    fetchBook();
-  }, [getBooks]);
+    filterHandler();
+  }, [filterHandler]);
 
-  // const filterResult = catItem => {
-  //   const result = data.category.filter(curData => {
-  //     return curData.category === catItem;
-  //   });
-  //   setData(result);
-  // };
+  const navigate = useNavigate();
+
+  const handleClick = bks => {
+    navigate(`/product/${bks}`);
+  };
 
   return (
     <>
@@ -154,11 +86,11 @@ function Shop() {
           separator={<ChevronRightIcon color="gray.500" />}
         >
           <BreadcrumbItem>
-            <BreadcrumbLink href="#">Home</BreadcrumbLink>
+            <BreadcrumbLink href="/home">Home</BreadcrumbLink>
           </BreadcrumbItem>
 
           <BreadcrumbItem isCurrentPage>
-            <BreadcrumbLink href="#">Books</BreadcrumbLink>
+            <BreadcrumbLink href="/shop">Books</BreadcrumbLink>
           </BreadcrumbItem>
         </Breadcrumb>
 
@@ -181,10 +113,10 @@ function Shop() {
             >
               Sort By
             </Text>
-            <Select placeholder="Select option">
-              {sort.map(s => (
-                <option key={s} value="option">
-                  {s}
+            <Select onChange={sortHandler} placeholder="Select option">
+              {sortOptions.map(s => (
+                <option key={s.value} value={s.value}>
+                  {s.text}
                 </option>
               ))}
             </Select>
@@ -198,60 +130,78 @@ function Shop() {
               <Heading fontSize="24px" fontWeight="700" color="#0D2725" pb={5}>
                 Category
               </Heading>
-              {catCheck.map(cat => (
+              {Object.keys(catCheck).map(cat => (
                 <Checkbox
-                  key={cat.label}
+                  checked={catCheck[cat]}
+                  onChange={() => categoriesHandler(cat)}
+                  key={cat}
                   fontSize="16px"
                   fontWeight={500}
                   color="#0D2725"
                 >
-                  {cat.label}
+                  {cat}
                 </Checkbox>
               ))}
             </Stack>
             {/*Price Filter*/}
-            <Stack py={30}>
+            <Stack py={30} mb={5}>
               <Heading fontSize="24px" fontWeight="700" color="#0D2725" pb={5}>
                 Price
               </Heading>
-              <Slider
-                aria-label="slider-ex-1"
-                defaultValue={30}
+              <RangeSlider
                 w="250px"
                 colorScheme={'green'}
+                min={0}
+                max={5000}
+                onChange={val => setRange(val)}
+                defaultValue={[0, 5000]}
               >
-                <SliderTrack>
-                  <SliderFilledTrack />
-                </SliderTrack>
-                <SliderThumb boxSize={6}>
+                <RangeSliderTrack>
+                  <RangeSliderFilledTrack />
+                </RangeSliderTrack>
+                <RangeSliderThumb index={0}>
                   <Box color="#0D2725" as={FaDollarSign} />
-                </SliderThumb>
-              </Slider>
-              <Stack spacing={3} direction={'row'}>
-                <Input
-                  variant="outline"
-                  placeholder="100"
-                  focusBorderColor="#0D2725"
-                />
-                <Input
-                  variant="outline"
-                  placeholder="1,500"
-                  focusBorderColor="#0D2725"
-                />
-              </Stack>
+                </RangeSliderThumb>
+                <RangeSliderThumb index={1}>
+                  <Box color="#0D2725" as={FaDollarSign} />
+                </RangeSliderThumb>
+              </RangeSlider>
+              <Flex justifyContent={'space-between'}>
+                <Text color="#0D2725" as={'span'}>
+                  {range[0]}
+                </Text>
+                <Text color="#0D2725" as={'span'}>
+                  {range[1]}
+                </Text>
+              </Flex>
             </Stack>
+            <Button onClick={filterHandler} bg="#0D2725" colorScheme="green">
+              Filter
+            </Button>
           </Stack>
 
           {/*books*/}
           <Grid templateColumns="repeat(3, 1fr)" gap={10} pl={40} py={100}>
             {books.map(info => (
-              <BookCard
-                key={info.id}
-                img={info.imageUrl}
-                title={info.title}
-                author={info.author}
-                price={info.price}
-              />
+              <Link
+                px={15}
+                pb={5}
+                _hover={{
+                  shadow: 'xl',
+                  transform: 'scale(1.1)',
+                  borderRadius: '0.5rem',
+                  transition: 'transform .3s',
+                }}
+                onClick={() => handleClick(`${info._id}`)}
+              >
+                <BookCard
+                  key={info.id}
+                  img={info.imageUrl}
+                  title={info.title}
+                  author={info.author}
+                  price={info.price}
+                />
+              </Link>
             ))}
           </Grid>
         </Flex>
