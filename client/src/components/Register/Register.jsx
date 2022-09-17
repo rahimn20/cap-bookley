@@ -15,6 +15,8 @@ import { FcGoogle } from 'react-icons/fc';
 import React from 'react';
 import { library } from '../../assets/index';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import AuthContext from '../context/auth';
 // import {Link} from "react-router-dom"
 
 function Register() {
@@ -25,22 +27,13 @@ function Register() {
   const [phoneNumber, setPhoneNumber] = React.useState('');
   const [password, setPassword] = React.useState('');
   const navigate = useNavigate();
+  const { register } = useContext(AuthContext);
 
   const handleSubmit = async e => {
     // e.preventDefault();
     const user = { firstName, lastName, email, address, phoneNumber, password };
     console.log({ user });
-    try {
-      fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user),
-      }).then(res => res.json());
-    } catch (error) {
-      console.error('Error registering user', error);
-    }
+    await register(user);
     navigate('/login');
   };
 

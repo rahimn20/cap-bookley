@@ -18,112 +18,130 @@ import {
   Stack,
   Text,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useContext } from 'react';
 import { FaDollarSign } from 'react-icons/fa';
 import Footer from '../../Footer/Footer';
 import Navbar from '../../Navbar/Navbar';
-import {
-  book,
-  book1,
-  book2,
-  book3,
-  book4,
-  book5,
-  book6,
-  book7,
-  book8,
-  book9,
-  book10,
-  book11,
-} from '../../../assets/index';
+// import {
+//   book,
+//   book1,
+//   book2,
+//   book3,
+//   book4,
+//   book5,
+//   book6,
+//   book7,
+//   book8,
+//   book9,
+//   book10,
+//   book11,
+// } from '../../../assets/index';
 import BookCard from '../../Landing/Featured/BookCard';
+import BookContext from '../../context/books';
 
 const catCheck = [
-  'Arts and Crafts',
-  'Business and Management',
-  'Fiction',
-  'Non Fiction',
-  'History',
+  { label: 'Arts and Crafts', checked: false },
+  { label: 'Business and Management', checked: false },
+  { label: 'Fiction', checked: false },
+  { label: 'Non Fiction', checked: false },
+  { label: 'History', checked: false },
 ];
 
 const sort = ['Newest', 'Featured', 'Top Selling'];
 
-const shopSet = [
-  {
-    img: book,
-    title: 'Dongri to Dubai',
-    author: 'Hussain Zaidi',
-    price: '1,200',
-  },
-  {
-    img: book1,
-    title: 'Ego is the Enemy',
-    author: 'Ryan Holiday',
-    price: '1,500',
-  },
-  {
-    img: book2,
-    title: 'Rich Dad Poor Dad',
-    author: 'Robert T. Kiyosaki',
-    price: '2,200',
-  },
-  {
-    img: book3,
-    title: 'War Storm',
-    author: 'Victoria Aveyard',
-    price: '1,200',
-  },
-  {
-    img: book4,
-    title: 'King of Scars',
-    author: 'Leigh Bardugo',
-    price: '3,600 ',
-  },
-  {
-    img: book5,
-    title: 'The Hobbit',
-    author: 'J.R.R Tolkien',
-    price: '1,300 ',
-  },
-  {
-    img: book6,
-    title: 'Children of Blood and Bone',
-    author: 'Tomi Adeyemi',
-    price: '2,600',
-  },
-  {
-    img: book7,
-    title: 'Caraval',
-    author: 'Stephanie Garber',
-    price: '1,900',
-  },
-  {
-    img: book8,
-    title: 'The Da Vinci Code',
-    author: 'Angels & Demons',
-    price: '2,600 ',
-  },
-  {
-    img: book9,
-    title: 'The Shining',
-    author: 'Stephen King',
-    price: '1,500',
-  },
-  {
-    img: book10,
-    title: 'Frost Blood',
-    author: 'Elly Blake',
-    price: '2,400',
-  },
-  {
-    img: book11,
-    title: 'To Kill a Mocking Bird',
-    author: 'Harper Lee',
-    price: '1,900',
-  },
-];
+// const shopSet = [
+//   {
+//     img: book,
+//     title: 'Dongri to Dubai',
+//     author: 'Hussain Zaidi',
+//     price: '1,200',
+//   },
+//   {
+//     img: book1,
+//     title: 'Ego is the Enemy',
+//     author: 'Ryan Holiday',
+//     price: '1,500',
+//   },
+//   {
+//     img: book2,
+//     title: 'Rich Dad Poor Dad',
+//     author: 'Robert T. Kiyosaki',
+//     price: '2,200',
+//   },
+//   {
+//     img: book3,
+//     title: 'War Storm',
+//     author: 'Victoria Aveyard',
+//     price: '1,200',
+//   },
+//   {
+//     img: book4,
+//     title: 'King of Scars',
+//     author: 'Leigh Bardugo',
+//     price: '3,600 ',
+//   },
+//   {
+//     img: book5,
+//     title: 'The Hobbit',
+//     author: 'J.R.R Tolkien',
+//     price: '1,300 ',
+//   },
+//   {
+//     img: book6,
+//     title: 'Children of Blood and Bone',
+//     author: 'Tomi Adeyemi',
+//     price: '2,600',
+//   },
+//   {
+//     img: book7,
+//     title: 'Caraval',
+//     author: 'Stephanie Garber',
+//     price: '1,900',
+//   },
+//   {
+//     img: book8,
+//     title: 'The Da Vinci Code',
+//     author: 'Angels & Demons',
+//     price: '2,600 ',
+//   },
+//   {
+//     img: book9,
+//     title: 'The Shining',
+//     author: 'Stephen King',
+//     price: '1,500',
+//   },
+//   {
+//     img: book10,
+//     title: 'Frost Blood',
+//     author: 'Elly Blake',
+//     price: '2,400',
+//   },
+//   {
+//     img: book11,
+//     title: 'To Kill a Mocking Bird',
+//     author: 'Harper Lee',
+//     price: '1,900',
+//   },
+// ];
 
 function Shop() {
+  // const [data, setData] = React.useState([]);
+  const { books, getBooks } = useContext(BookContext);
+
+  React.useEffect(() => {
+    const fetchBook = async () => {
+      await getBooks();
+    };
+    fetchBook();
+  }, [getBooks]);
+
+  // const filterResult = catItem => {
+  //   const result = data.category.filter(curData => {
+  //     return curData.category === catItem;
+  //   });
+  //   setData(result);
+  // };
+
   return (
     <>
       <Navbar />
@@ -165,7 +183,9 @@ function Shop() {
             </Text>
             <Select placeholder="Select option">
               {sort.map(s => (
-                <option value="option">{s}</option>
+                <option key={s} value="option">
+                  {s}
+                </option>
               ))}
             </Select>
           </Stack>
@@ -179,8 +199,13 @@ function Shop() {
                 Category
               </Heading>
               {catCheck.map(cat => (
-                <Checkbox fontSize="16px" fontWeight={500} color="#0D2725">
-                  {cat}
+                <Checkbox
+                  key={cat.label}
+                  fontSize="16px"
+                  fontWeight={500}
+                  color="#0D2725"
+                >
+                  {cat.label}
                 </Checkbox>
               ))}
             </Stack>
@@ -219,9 +244,10 @@ function Shop() {
 
           {/*books*/}
           <Grid templateColumns="repeat(3, 1fr)" gap={10} pl={40} py={100}>
-            {shopSet.map(info => (
+            {books.map(info => (
               <BookCard
-                img={info.img}
+                key={info.id}
+                img={info.imageUrl}
                 title={info.title}
                 author={info.author}
                 price={info.price}

@@ -1,62 +1,46 @@
 import React from 'react';
 import { Heading, Stack, Flex, Container } from '@chakra-ui/react';
 import BookCard from './BookCard';
-import { book, book1, book2, book3 } from '../../../assets/index';
+// import { book, book1, book2, book3 } from '../../../assets/index';
+import BookContext from '../../context/books';
+import { useContext } from 'react';
 
-const bookSet = [
-  {
-    img: book,
-    title: 'Dongri to Dubai',
-    author: 'Hussain Zaidi',
-    price: '1,200',
-  },
-  {
-    img: book1,
-    title: 'Ego is the Enemy',
-    author: 'Ryan Holiday',
-    price: '1,500',
-  },
-  {
-    img: book2,
-    title: 'Rich Dad Poor Dad',
-    author: 'Robert T. Kiyosaki',
-    price: '2,200',
-  },
-  {
-    img: book3,
-    title: 'War Storm',
-    author: 'Victoria Aveyard',
-    price: '1,200',
-  },
-];
+// const bookSet = [
+//   {
+//     img: book,
+//     title: 'Dongri to Dubai',
+//     author: 'Hussain Zaidi',
+//     price: '1,200',
+//   },
+//   {
+//     img: book1,
+//     title: 'Ego is the Enemy',
+//     author: 'Ryan Holiday',
+//     price: '1,500',
+//   },
+//   {
+//     img: book2,
+//     title: 'Rich Dad Poor Dad',
+//     author: 'Robert T. Kiyosaki',
+//     price: '2,200',
+//   },
+//   {
+//     img: book3,
+//     title: 'War Storm',
+//     author: 'Victoria Aveyard',
+//     price: '1,200',
+//   },
+// ];
 
 function Featured() {
-  const [data, setData] = React.useState([]);
-
-  const getUser = () => {
-    fetch('/api/books')
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-        throw res;
-      })
-      .then(data => {
-        // console.log(data);
-        setData(data);
-        // rows = setRows(data);
-      })
-      .catch(error => {
-        console.error(
-          'Error fetching data, Please turn on Port address',
-          error
-        );
-      });
-  };
+  const { books, getBooks } = useContext(BookContext);
 
   React.useEffect(() => {
-    getUser();
-  }, []);
+    const fetchBook = async () => {
+      await getBooks();
+    };
+    fetchBook();
+  }, [getBooks]);
 
   return (
     <>
@@ -76,21 +60,13 @@ function Featured() {
             direction={{ base: 'column', md: 'row' }}
             gap="120"
           >
-            {/* {bookSet.map(info => (
+            {books.map(bks => (
               <BookCard
-                img={info.img}
-                title={info.title}
-                author={info.author}
-                price={info.price}
-              />
-            ))} */}
-
-            {data.map(info => (
-              <BookCard
-                img={info.imageUrl}
-                title={info.title}
-                author={info.author}
-                price={info.price}
+                key={bks.id}
+                img={bks.imageUrl}
+                title={bks.title}
+                author={bks.author}
+                price={bks.price}
               />
             ))}
           </Stack>

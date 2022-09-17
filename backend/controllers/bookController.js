@@ -1,5 +1,8 @@
 const Book = require("../models/bookModel");
 const cloudinary = require("cloudinary").v2;
+// const cors = require('cors')
+
+// app.use(cors())
 
 cloudinary.config({
   cloud_name: process.env.CLOUDNAME,
@@ -24,6 +27,48 @@ const getBook = async function (req, res) {
     });
 };
 
+// const createBook = async (req, res) => {
+//   const {
+//     title,
+//     author,
+//     description,
+//     category,
+//     purchaseCount,
+//     price,
+//     available,
+//     imageUrl,
+//     publishDate,
+//     tags,
+//   } = req.body;
+//   console.log(req.body);
+//   console.log("file:" , req.file)
+//   return
+//   try {
+//     const result = await cloudinary.uploader.upload(imageUrl, {
+//       folder: "books",
+//     });
+
+//     const book = await Book.create({
+//       title,
+//       author,
+//       description,
+//       category,
+//       purchaseCount,
+//       price,
+//       available,
+//       imageUrl: {
+//         public_id: result.public_id,
+//         url: result.secure_url,
+//       },
+//       publishDate,
+//       tags,
+//     });
+//     res.status(200).json(book);
+//   } catch (err) {
+//     res.status(400).json({ error: err });
+//   }
+// };
+
 const createBook = async (req, res) => {
   const {
     title,
@@ -37,11 +82,8 @@ const createBook = async (req, res) => {
     publishDate,
     tags,
   } = req.body;
+  console.log(req.body);
   try {
-    const result = await cloudinary.uploader.upload(imageUrl, {
-      folder: "books",
-    });
-
     const book = await Book.create({
       title,
       author,
@@ -50,10 +92,7 @@ const createBook = async (req, res) => {
       purchaseCount,
       price,
       available,
-      imageUrl: {
-        public_id: result.public_id,
-        url: result.secure_url,
-      },
+      imageUrl,
       publishDate,
       tags,
     });

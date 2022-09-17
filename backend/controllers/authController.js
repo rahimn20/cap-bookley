@@ -24,11 +24,11 @@ const registerUser = async (req, res) => {
     const savedUser = await newUser.save();
     console.log({ savedUser });
     res.status(201).json(savedUser);
+    console.log(`Successfully registered user`);
   } catch (err) {
     res.status(500).json(err);
     console.log({ err });
   }
-  console.log(`Successfully registered user`);
 };
 
 const loginUser = async (req, res) => {
@@ -54,10 +54,9 @@ const loginUser = async (req, res) => {
     );
 
     const { password, ...others } = user._doc;
-
+    console.log(`Successfully logged in`);
     res.status(200).json({ ...others, accessToken });
   } catch (err) {}
-  console.log(`Successfully logged in`);
 };
 
 module.exports = {

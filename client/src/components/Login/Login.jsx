@@ -16,32 +16,21 @@ import { FcGoogle } from 'react-icons/fc';
 import React from 'react';
 import { library } from '../../assets/index';
 import { useNavigate } from 'react-router-dom';
+import { useContext } from 'react';
+import AuthContext from '../context/auth';
 
 function Register() {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const handleSubmit = async e => {
     // e.preventDefault();
     const user = { email, password };
     console.log({ user });
-    try {
-      fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(user),
-      })
-        .then(res => res.json())
-        .then(data => {
-          console.log({ data });
-          navigate('/');
-        });
-    } catch (error) {
-      console.error('Error signing in user', error);
-    }
+    await login(user);
+    navigate('/');
   };
 
   return (

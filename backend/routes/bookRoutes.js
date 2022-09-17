@@ -7,11 +7,13 @@ const {
   updateBook,
 } = require("../controllers/bookController");
 const { verifyToken } = require("../middleware/verifyToken");
+// const {multerUploads} = require("../middleware/multerUploads")
 
 const router = express.Router();
 
 router.get("/", getBooks);
 router.get("/:id", verifyToken, getBook);
+// router.post("/", multerUploads, createBook);
 router.post("/", createBook);
 router.delete("/:id", verifyToken, deleteBook);
 router.patch("/:id", verifyToken, updateBook);

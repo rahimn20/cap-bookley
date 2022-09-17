@@ -18,7 +18,7 @@ const bookSchema = new Schema(
     },
     category: {
       type: String,
-      required: true,
+      // required: true,
     },
     purchaseCount: {
       type: Number,
@@ -33,16 +33,16 @@ const bookSchema = new Schema(
       required: true,
     },
     imageUrl: {
-      public_id: {
-        type: String,
-        required: true,
-      },
-      url: {
-        type: String,
-        required: true,
-      },
-      // type: String,
-      // required: true,
+      // public_id: {
+      //   type: String,
+      //   required: true,
+      // },
+      // url: {
+      //   type: String,
+      //   required: true,
+      // },
+      type: String,
+      required: true,
     },
     publishDate: {
       type: Date,

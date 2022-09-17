@@ -51,6 +51,7 @@ function Featured() {
           >
             {bookSet.map(info => (
               <BookCard
+                key={info.id}
                 img={info.img}
                 title={info.title}
                 author={info.author}

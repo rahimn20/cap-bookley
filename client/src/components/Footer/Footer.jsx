@@ -54,11 +54,16 @@ function Footer() {
             </Stack>
 
             {footLinks.map(link => (
-              <Stack color="#FFFFFF" align={'flex-start'}>
+              <Stack key={link.header} color="#FFFFFF" align={'flex-start'}>
                 <ListHeader>{link.header}</ListHeader>
-                {link.links.map(l => (
-                  <Link href={'#'} fontSize="20px" fontWeight={400}>
-                    {l}
+                {link.links.map(li => (
+                  <Link
+                    key={li.name}
+                    href={'#'}
+                    fontSize="20px"
+                    fontWeight={400}
+                  >
+                    {li}
                   </Link>
                 ))}
               </Stack>

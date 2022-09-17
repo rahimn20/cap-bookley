@@ -22,8 +22,9 @@ function MyAccount() {
   const [description, setDescription] = React.useState('');
   const [category, setCategory] = React.useState('');
   const [price, setPrice] = React.useState('');
-  const [isAvailable, setIsAvailable] = React.useState(false);
+  const [available, setIsAvailable] = React.useState(false);
   const [imageUrl, setImageUrl] = React.useState('');
+  // const [image, setImage] = React.useState({ preview: '', data: '' });
 
   const categories = [
     'Arts and Crafts',
@@ -38,23 +39,31 @@ function MyAccount() {
     { name: 'Add New Book', icon: FaPlus },
   ];
 
-  const uploadImage = async () => {
-    const formData = new FormData();
-    formData.append('file', imageUrl);
-    //   formData.append('upload_preset', 'ml_default');
-    //     try {
-    //       fetch('https://api.cloudinary.com/v1_1/dx5ghfasm/image/upload', {
-    //         method: 'POST',
-    //         body: formData,
-    //       }).then(res => {
-    //         res.json();
-    //         console.log(res);
-    //         console.log({ formData });
-    //       });
-    //     } catch (error) {
-    //       console.error('Error uploading image to cloud', error);
-    //     }
-  };
+  // const handleFileChange = e => {
+  //   const img = {
+  //     preview: URL.createObjectURL(e.target.files[0]),
+  //     data: e.target.files[0],
+  //   };
+  //   setImage(img);
+  // };
+
+  // const uploadImage = async () => {
+  //   const formData = new FormData();
+  //   formData.append('file', imageUrl);
+  //   formData.append('upload_preset', 'ml_default');
+  //     try {
+  //       fetch('https://api.cloudinary.com/v1_1/dx5ghfasm/image/upload', {
+  //         method: 'POST',
+  //         body: formData,
+  //       }).then(res => {
+  //         res.json();
+  //         console.log(res);
+  //         console.log({ formData });
+  //       });
+  //     } catch (error) {
+  //       console.error('Error uploading image to cloud', error);
+  //     }
+  // };
 
   const handleSubmit = async e => {
     // e.preventDefault();
@@ -64,7 +73,7 @@ function MyAccount() {
       description,
       category,
       price,
-      isAvailable,
+      available,
       imageUrl,
     };
     console.log({ books });
@@ -77,7 +86,7 @@ function MyAccount() {
         body: JSON.stringify(books),
       }).then(res => res.json());
     } catch (error) {
-      console.error('Error registering user', error);
+      console.error('Error adding a new book', error);
     }
     // navigate('/login');
   };
@@ -90,9 +99,9 @@ function MyAccount() {
         <Stack direction={'row'}>
           <Flex py={25}>
             <Stack>
-              {LinkItems.map(link => (
-                <NavItem key={link.name} icon={link.icon}>
-                  {link.name}
+              {LinkItems.map(linkk => (
+                <NavItem key={linkk.name} icon={linkk.icon}>
+                  {linkk.name}
                 </NavItem>
               ))}
             </Stack>
@@ -143,6 +152,7 @@ function MyAccount() {
               <Select placeholder="Select category">
                 {categories.map(cat => (
                   <option
+                    key={cat}
                     value={category}
                     onChange={e => setCategory(e.target.value)}
                   >
@@ -163,7 +173,7 @@ function MyAccount() {
                 ></Input>
               </FormControl>
               <Checkbox
-                value={isAvailable}
+                value={available}
                 onChange={e => {
                   setIsAvailable(e.target.value);
                 }}
@@ -171,18 +181,30 @@ function MyAccount() {
                 Is book available?
               </Checkbox>
               <FormControl id="imageUrl">
-                <input
+                {/* <input type='file' name='file' onChange={handleFileChange}></input> */}
+                {/* <input
                   type={'file'}
+                  name="image"
                   border="none"
                   size="md"
                   //   value={imageUrl}
                   onChange={e => {
                     setImageUrl(e.target.files[0]);
                   }}
-                  //   onChange={e => {
-                  //     setImageUrl(e.target.imageUrl);
-                  //   }}
-                ></input>
+                    // onChange={e => {
+                    //   setImageUrl(e.target.imageUrl);
+                    // }}
+                ></input> */}
+                <Input
+                  focusBorderColor="#0D2725"
+                  autoComplete="off"
+                  placeholder="Enter image URL"
+                  size="md"
+                  value={imageUrl}
+                  onChange={e => {
+                    setImageUrl(e.target.value);
+                  }}
+                ></Input>
               </FormControl>
               <Button
                 bg="#0D2725"

@@ -63,7 +63,7 @@ function Hero() {
               </Stack>
 
               <Container maxW="full">
-                <Image src={stand} class="stand" alt="" mb="-300px" />
+                <Image src={stand} className="stand" alt="" mb="-300px" />
               </Container>
 
               {/* <Image objectFit="cover" h="full" src={stand} /> */}
@@ -75,11 +75,12 @@ function Hero() {
       {/*Icons*/}
       <Container maxW="8xl" py="40px">
         <Flex alignItems="center" justifyContent="center" gap="160px">
-          {iconSet.map(info => (
+          {iconSet.map(i => (
             <IconCard
-              icon={info.icon}
-              title={info.title}
-              description={info.description}
+              key={i.title}
+              icon={i.icon}
+              title={i.title}
+              description={i.description}
             />
           ))}
         </Flex>
